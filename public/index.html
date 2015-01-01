@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<!-- Make app dimentions feel native -->
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/> -->
+		<script>
+		document.ontouchstart = function(e){ 
+			e.preventDefault() 
+		}
+		</script>
+
+		<!-- Deal with status bar -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!-- Made addable to homescreen  -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="mobile-web-app-capable" content="yes">
+
+		<!-- Add Source Sans Pro font -->
+		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+
+		<!-- Add scripts -->
+		<script src='/socket.io/socket.io.js'></script>
+		<!-- <script src='/jquery.js'></script> -->
+		<script src='/client.js'></script>
+
+		<!-- Define styles -->
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+
+	<body>
+		<div id='game-container'>
+			<div id='join-scene' class='scene'>
+				<input type="text" id="username" placeholder="Username" autofocus>
+				<div id='join-button' class='button'>Join</div>
+			</div>
+			<div id='waiting-scene' class='scene'> <!-- For beginning game and ends of rounds -->
+				<div id='members'>
+					<!-- <table>
+						<tr>
+							<td>Person 1</td>
+							<td>Person 2</td>
+						</tr>
+					</table> -->
+				</div>
+				<div id='team-one-button' class='button'>Team 1</div>
+				<div id='team-two-button' class='button'>Team 2</div>
+				<div id='team-arrow' class='red'></div>
+				<div id='start-button' class='button'>Start Game</div> <!-- Only shows for starting person -->
+			</div>
+			<div id='game-scene' class='scene hide-buttons'>
+				<div id='phrase'>Phrase here</div>
+				<div id='next-button' class='button'>Next</div>
+				<div id='correct-button' class='button'>Correct</div>
+				<div id='current-talker'>Talker</div>
+			</div>
+			<div id='gameover-scene' class='scene'>
+				<div id='team-one-score'>7</div>
+				<div id='team-two-score'>7</div>
+				<div id='new-game-button' class='button'>New Round</div>
+		</div>
+		</div>
+	</body>
+</html>
