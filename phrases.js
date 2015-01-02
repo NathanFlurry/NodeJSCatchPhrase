@@ -49,7 +49,7 @@ module.exports = [
 	"\"Bwah ha ha\"",
 	"\"Oh fiddle dee dee\"",
 	"Schlock",
-	"Touch titty",
+	// "Touch titty",
 	"I can't beleive I ate...",
 	"Spaceteam",
 	"Wine",

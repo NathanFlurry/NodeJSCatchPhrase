@@ -1,13 +1,7 @@
 // Touch events https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Touch_events
 // Drop Jquery http://toddmotto.com/is-it-time-to-drop-jquery-essentials-to-learning-javascript-from-a-jquery-background/
 
-// Initiate FastClick
-if ('addEventListener' in document) {
-	document.addEventListener('DOMContentLoaded', function() {
-		FastClick.attach(document.body);
-	}, false);
-}
-
+setTimeout(function () {   window.scrollTo(0, 1); }, 5000)
 
 // Start app
 var socket = io()
@@ -23,7 +17,11 @@ var team2Score = 0
 var lastWinner = 0
 
 window.onload = function() {
-	window.scrollTo(0,1) // Hide top bar
+	if ('addEventListener' in document) {
+		document.addEventListener('DOMContentLoaded', function() {
+			FastClick.attach(document.body);
+		}, false);
+	}
 
 	// Start app
 	init()
@@ -99,6 +97,11 @@ function styling() {
 		}, false)
 	}
 }
+
+socket.on('client id', function(data) {
+	var clientID = document.querySelector( '#client-id' )
+	clientID.innerHTML = data.clientID
+})
 
 /* Join scene */
 function joinScene() {
@@ -288,5 +291,9 @@ socket.on('new game screen', function() {
 })
 
 
+window.onerror = function(message, url, lineNumber) {
+	socket.emit('client error', message, url, lineNumber)
+	return true
+}
 
 

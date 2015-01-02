@@ -155,6 +155,11 @@ function nextTalker() {
 }
 
 io.on('connection', function(socket){
+	console.log("Socket with ID " + socket.id + " connected. This socket has a name of " + socket.username + ".")
+	socket.emit('client id', {
+		clientID: socket.id
+	})
+
 	socket.on('add user', function(username) {
 		// Add to clients
 		clients.push(socket.id)
@@ -221,10 +226,18 @@ io.on('connection', function(socket){
 		}
 	})
 
+	socket.on('client error', function(message, url, lineNumber) {
+		console.log("Client with username " + socket.username + " had error with message '" + message + "' at line number " + lineNumber + ".")
+	})
+
 	socket.on('disconnect', function() {
 		// Remove from clients
-		console.log(socket.id + " disconnected.")
-		clients.splice(clients.indexOf(socket.id), 1)
+		console.log(socket.id + " disconnected who had the name " + socket.username + ".")
+		
+		var index = clients.indexOf(socket.id)
+		if (index >= 0) {
+			clients.splice(index, 1)
+		}
 		io.sockets.emit('new teams', {
 			teams: formulateTeamList()
 		})

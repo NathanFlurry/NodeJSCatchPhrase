@@ -2,11 +2,12 @@
 	<head>
 		<!-- Make app dimentions feel native -->
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/> -->
-		<script>
+		<!-- <script>
 		document.ontouchstart = function(e){ 
 			e.preventDefault() 
 		}
-		</script>
+		</script> -->
+		<meta name="viewport" content="width=device-width, user-scalable=0, minimal-ui, initial-scale=1">
 
 		<!-- Deal with status bar -->
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -28,9 +29,10 @@
 	</head>
 
 	<body>
+		<div id='client-id'></div>
 		<div id='game-container'>
 			<div id='join-scene' class='scene'>
-				<input type="text" id="username" placeholder="Username" autofocus>
+				<input type="text" id="username" placeholder="Username" > <!-- autofocus -->
 				<div id='join-button' class='button'>Join</div>
 			</div>
 			<div id='waiting-scene' class='scene'> <!-- For beginning game and ends of rounds -->
