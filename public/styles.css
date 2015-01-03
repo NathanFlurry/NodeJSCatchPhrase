@@ -21,6 +21,10 @@ html {
 	font-family: 'Source Sans Pro', 'Helvetica Neue-Light', Helvetica, Arial, sans-serif;
 }
 
+audio {
+	display: none;
+}
+
 .button {
 	background-color: #666666;
 
@@ -97,6 +101,8 @@ input[type=text] {
 	left: 10px;
 
 	font-size: 5vh;
+
+	display: none;
 }
 
 #team-one-score {

@@ -1,12 +1,16 @@
 // Touch events https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Touch_events
 // Drop Jquery http://toddmotto.com/is-it-time-to-drop-jquery-essentials-to-learning-javascript-from-a-jquery-background/
 
-setTimeout(function () {   window.scrollTo(0, 1); }, 5000)
+//setInterval(function () { window.href = "#" + Math.floor(Math.random() * 999) }, 10000)
 
 // Start app
 var socket = io()
 
 var beep = new Audio("beep.mp3")
+beep.volume = 0
+
+// Keep device awake
+//setInterval(function () { beep.play() }, 10000)
 
 var username = ""
 var team = 0
@@ -140,7 +144,7 @@ function waitingScene() {
 	var startRoundButton = document.querySelector( '#start-button' )
 
 	function startRound() {
-		socket.emit('start round')
+		socket.emit('start game')
 	}
 
 	startRoundButton.addEventListener('touchend', startRound, false)

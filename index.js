@@ -50,22 +50,20 @@ var teams = []
 var currentTalker = null
 var currentTalkerTeam = null
 
-initGame()
+var remainingPhrases = []
 
 function initGame() {
 	// Init lists
 	var team = {
 		points: 0,
-		members: []
+		members: [],
+		remainingMembers: []
 	}
 
 	teams = []
 	teams[0] = JSON.parse(JSON.stringify(team)) // Duplicate object to remove references
 	teams[1] = JSON.parse(JSON.stringify(team))
 
-}
-
-function startRound() {
 	// Put players on teams
 	for (var i in clients) {
 		var playerTeam
@@ -76,9 +74,12 @@ function startRound() {
 		}
 		teams[playerTeam].members.push(clients[i])
 	}
+}
 
+function startRound() {
+	
 	// Setup timer
-	timeRemaining = Math.floor(Math.random() * 15) + 30
+	timeRemaining = Math.floor(Math.random() * 30) + 75
 
 	io.sockets.emit('clear phrase')
 
@@ -126,30 +127,49 @@ function countMembers(team) {
 }
 
 function nextPhrase() {
-	return phrases[Math.floor(Math.random() * phrases.length)]
+	if (remainingPhrases.length <= 2) {
+		for (var i = 0; i < phrases.length; i++) {
+			remainingPhrases.push(phrases[i])
+		}
+	}
+
+	var index = Math.floor(Math.random() * remainingPhrases.length)
+	var word = remainingPhrases.splice(index, 1)
+
+	return word
 }
 
 function nextTalker() {
-	var e = new Error('dummy')
-	var stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
-		.replace(/^\s+at\s+/gm, '')
-		.replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@')
-		.split('\n')
-
 	if (typeof currentTalkerTeam !== 'undefined') {
 		currentTalkerTeam = (currentTalkerTeam + 1) % 2
 	} else {
 		currentTalkerTeam = Math.round(Math.random())
 	}
 
-	var teamList = teams[currentTalkerTeam].members
-	var talkerIndex = Math.floor(Math.random() * teamList.length)
-	currentTalker = teamList[talkerIndex]
+	var team = teams[currentTalkerTeam]
+
+	if (team.remainingMembers.length <= 0) {
+		console.log("\nRenewing members")
+		for (var i = 0; i < team.members.length; i++) {
+			team.remainingMembers.push(team.members[i])
+		} 
+	}
+
+	var talkerIndex = Math.floor(Math.random() * team.remainingMembers.length)
+	currentTalker = team.remainingMembers[talkerIndex]
+
+	console.log("\nRemaining members: " + team.remainingMembers)
 
 	var talkerClient = c(currentTalker)
-	talkerClient.emit('new phrase', {
-		phrase: nextPhrase()
-	})
+	if (talkerClient == undefined || talkerClient == null) {
+		console.log("Remaining members: " + team.remainingMembers + "\nTalker index: " + talkerIndex + "\nClient: " + talkerClient)
+		return nextTalker()
+	} else {
+		talkerClient.emit('new phrase', {
+			phrase: nextPhrase()
+		})
+		team.remainingMembers.splice(talkerIndex, 1)
+	}
 
 	return talkerClient.username
 }
@@ -194,6 +214,15 @@ io.on('connection', function(socket){
 		})
 	})
 
+	socket.on('start game', function() {
+		initGame()
+		startRound()
+		io.sockets.emit('new round', {
+			talker: c(currentTalker).username,
+			team: currentTalkerTeam
+		})
+	})
+
 	socket.on('start round', function() {
 		startRound()
 		io.sockets.emit('new round', {
@@ -203,7 +232,6 @@ io.on('connection', function(socket){
 	})
 
 	socket.on('new game', function() {
-		initGame()
 		io.sockets.emit('new game screen')
 	})
 

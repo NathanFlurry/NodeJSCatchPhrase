@@ -65,7 +65,7 @@ module.exports = [
 	"\"Ex-CUSE me...\"",
 	"\"Let me count the ribbons...\"",
 	"Hilarious",
-	"\"Let me check my diary\"",
+	// "\"Let me check my diary\"",
 	"KickAssteroids",
 	"StackIt",
 	"LaughItUp",
